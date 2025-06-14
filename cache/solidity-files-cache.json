@@ -1,0 +1,115 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/shivang-dutta/Desktop/Custom_ERC-721_creation/custom_ERC-721/contracts/CustomERC721.sol": {
+      "lastModificationDate": 1749715682208,
+      "contentHash": "8b7836215e4d5c709ebc6645b4372f0d",
+      "sourceName": "contracts/CustomERC721.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "CustomERC721",
+        "IERC721Enumerable",
+        "IERC721Receiver"
+      ]
+    },
+    "/home/shivang-dutta/Desktop/Custom_ERC-721_creation/custom_ERC-721/contracts/TestCustomERC721.sol": {
+      "lastModificationDate": 1749496679825,
+      "contentHash": "9949ed5dee3cde49d9c346ce4834bb5a",
+      "sourceName": "contracts/TestCustomERC721.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./CustomERC721.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TestCustomERC721"
+      ]
+    },
+    "/home/shivang-dutta/Desktop/Custom_ERC-721_creation/custom_ERC-721/contracts/MyNFT.sol": {
+      "lastModificationDate": 1749717145723,
+      "contentHash": "860f650d78c3f7381a207118a5345daa",
+      "sourceName": "contracts/MyNFT.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": []
+    }
+  }
+}
