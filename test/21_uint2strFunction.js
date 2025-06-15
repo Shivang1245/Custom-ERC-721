@@ -1,15 +1,42 @@
+require("dotenv").config();
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("CustomERC721 - _uint2str() Function", function () {
-  let TestCustomERC721, customERC721;
+  let customERC721;
   let owner;
 
-  beforeEach(async function () {
+  before(async function () {
     [owner] = await ethers.getSigners();
-    TestCustomERC721 = await ethers.getContractFactory("TestCustomERC721");
-    customERC721 = await TestCustomERC721.deploy("Test Token", "TTK");
-    await customERC721.waitForDeployment();
+    const deployedAddress = process.env.TESTCUSTOMERC721;
+    if (deployedAddress && deployedAddress.trim() !== "") {
+      try {
+        customERC721 = await ethers.getContractAt(
+          "TestCustomERC721",
+          deployedAddress.trim()
+        );
+        await customERC721.name();
+        console.log(
+          "Using deployed TestCustomERC721 at:",
+          deployedAddress.trim()
+        );
+      } catch (error) {
+        console.log(
+          "Provided contract address is invalid or contract not deployed; deploying a new instance."
+        );
+      }
+    }
+    if (!customERC721) {
+      const TestCustomERC721 = await ethers.getContractFactory(
+        "TestCustomERC721"
+      );
+      customERC721 = await TestCustomERC721.deploy("Test Token", "TTK");
+      await customERC721.waitForDeployment();
+      console.log(
+        "Deployed new TestCustomERC721 at:",
+        await customERC721.getAddress()
+      );
+    }
   });
 
   it("should return '0' when given 0", async function () {

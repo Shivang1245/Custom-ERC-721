@@ -1,19 +1,27 @@
+require("dotenv").config();
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("CustomERC721 - isApprovedForAll() Function", function () {
-  let TestCustomERC721, customERC721;
-  let owner, addr1, addr2;
+  let customERC721, owner, addr1, addr2;
 
-  beforeEach(async function () {
+  before(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
-
-    TestCustomERC721 = await ethers.getContractFactory("TestCustomERC721");
-    customERC721 = await TestCustomERC721.deploy("Test Token", "TTK");
-    await customERC721.waitForDeployment();
+    const deployedAddress = process.env.TESTCUSTOMERC721;
+    if (!deployedAddress || deployedAddress.trim() === "") {
+      throw new Error(
+        "No deployed contract address provided in TESTCUSTOMERC721."
+      );
+    }
+    customERC721 = await ethers.getContractAt(
+      "TestCustomERC721",
+      deployedAddress.trim()
+    );
+    console.log("Using deployed TestCustomERC721 at:", deployedAddress.trim());
   });
 
   it("should return false if no operator approval is set", async function () {
+    await (await customERC721.setApprovalForAll(addr1.address, false)).wait();
     const isApproved = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address
@@ -22,7 +30,7 @@ describe("CustomERC721 - isApprovedForAll() Function", function () {
   });
 
   it("should return true after the owner sets approval for all for an operator", async function () {
-    await customERC721.setApprovalForAll(addr1.address, true);
+    await (await customERC721.setApprovalForAll(addr1.address, true)).wait();
     const isApproved = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address
@@ -31,14 +39,14 @@ describe("CustomERC721 - isApprovedForAll() Function", function () {
   });
 
   it("should return false after the owner revokes approval for all", async function () {
-    await customERC721.setApprovalForAll(addr1.address, true);
+    await (await customERC721.setApprovalForAll(addr1.address, true)).wait();
     let isApproved = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address
     );
     expect(isApproved).to.be.true;
 
-    await customERC721.setApprovalForAll(addr1.address, false);
+    await (await customERC721.setApprovalForAll(addr1.address, false)).wait();
     isApproved = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address
@@ -47,7 +55,7 @@ describe("CustomERC721 - isApprovedForAll() Function", function () {
   });
 
   it("should maintain independent approvals for different owners", async function () {
-    await customERC721.setApprovalForAll(addr1.address, true);
+    await (await customERC721.setApprovalForAll(addr1.address, true)).wait();
     const isApprovedOwner = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address

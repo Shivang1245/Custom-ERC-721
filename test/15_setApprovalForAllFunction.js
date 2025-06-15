@@ -1,16 +1,24 @@
+require("dotenv").config();
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("CustomERC721 - setApprovalForAll() Function", function () {
-  let TestCustomERC721, customERC721;
+  let customERC721;
   let owner, addr1, addr2;
 
-  beforeEach(async function () {
+  before(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
-
-    TestCustomERC721 = await ethers.getContractFactory("TestCustomERC721");
-    customERC721 = await TestCustomERC721.deploy("Test Token", "TTK");
-    await customERC721.waitForDeployment();
+    const deployedAddress = process.env.TESTCUSTOMERC721;
+    if (!deployedAddress || deployedAddress.trim() === "") {
+      throw new Error(
+        "No deployed contract address provided in TESTCUSTOMERC721."
+      );
+    }
+    customERC721 = await ethers.getContractAt(
+      "TestCustomERC721",
+      deployedAddress.trim()
+    );
+    console.log("Using deployed TestCustomERC721 at:", deployedAddress.trim());
   });
 
   it("should revert when trying to set approval for self", async function () {
@@ -33,7 +41,6 @@ describe("CustomERC721 - setApprovalForAll() Function", function () {
 
   it("should allow revoking operator approval", async function () {
     await customERC721.setApprovalForAll(addr1.address, true);
-
     let isApproved = await customERC721.isApprovedForAll(
       owner.address,
       addr1.address

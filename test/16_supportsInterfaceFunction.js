@@ -1,17 +1,39 @@
+require("dotenv").config();
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("CustomERC721 - supportsInterface() Function", function () {
-  let CustomERC721, customERC721;
+  let customERC721;
   let owner, addr1, addr2;
 
-  beforeEach(async function () {
+  before(async function () {
     [owner, addr1, addr2] = await ethers.getSigners();
-
-    CustomERC721 = await ethers.getContractFactory("CustomERC721");
-
-    customERC721 = await CustomERC721.deploy("Test Token", "TTK");
-    await customERC721.waitForDeployment();
+    const deployedAddress = process.env.TESTCUSTOMERC721;
+    if (deployedAddress && deployedAddress.trim() !== "") {
+      try {
+        customERC721 = await ethers.getContractAt(
+          "CustomERC721",
+          deployedAddress.trim()
+        );
+        await customERC721.name();
+        console.log("Using deployed CustomERC721 at:", deployedAddress.trim());
+      } catch (error) {
+        console.log(
+          "Provided contract address is invalid or not deployed; deploying a new instance."
+        );
+      }
+    }
+    if (!customERC721) {
+      const CustomERC721Factory = await ethers.getContractFactory(
+        "CustomERC721"
+      );
+      customERC721 = await CustomERC721Factory.deploy("Test Token", "TTK");
+      await customERC721.waitForDeployment();
+      console.log(
+        "Deployed new CustomERC721 at:",
+        await customERC721.getAddress()
+      );
+    }
   });
 
   it("should return true for the ERC721 interface (0x80ac58cd)", async function () {
